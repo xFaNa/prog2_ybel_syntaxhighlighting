@@ -18,8 +18,26 @@ public final class MiniJavaTokens {
   // pattern can be selected as the "highlighted" region.
   public static List<Token> defaultTokens() {
     return List.of(
+        // Kommentare zuerst, damit Keywords?Strings innerhalb von Kommentaren nicht gewinnen
+        Token.of(
+            Pattern.compile("/\\*\\*.*?\\*/", Pattern.DOTALL),
+            MiniJavaColours.JAVADOC_COMMENT_COLOUR),
+        Token.of(
+            Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL), MiniJavaColours.BLOCK_COMMENT_COLOUR),
+        Token.of(Pattern.compile("//.*"), MiniJavaColours.LINE_COMMENT_COLOUR),
+
+        // Literale
         // Example: string literals (students should define further tokens below)
-        Token.of(Pattern.compile("\"([^\"\\\\]|\\\\.)*\""), MiniJavaColours.STRING_LITERAL_COLOUR)
+        Token.of(Pattern.compile("\"([^\"\\\\]|\\\\.)*\""), MiniJavaColours.STRING_LITERAL_COLOUR),
+        Token.of(Pattern.compile("'([^'\\\\]|\\\\.)'"), MiniJavaColours.CHAR_LITERAL_COLOUR),
+
+        // Annotationen z.B. @Override
+        Token.of(Pattern.compile("@[A-Za-z-]+"), MiniJavaColours.ANNOTATION_COLOUR),
+
+        // Java Schlüsselwörter als ganze Wörter
+        Token.of(
+            Pattern.compile("\\b(package|import|class|public|private|finale|return|null|new)\\b"),
+            MiniJavaColours.KEYWORD_COLOUR)
 
         // TODO: Define additional tokens for MiniJava, e.g. character literals, keywords,
         // annotations, comments, identifiers, numbers, operators, etc.
