@@ -1,6 +1,7 @@
 package highlighting.core;
 
 import java.awt.Color;
+import java.util.Objects;
 
 /** Represents a highlighted region within the text together with its colour. */
 public final class HighlightRegion {
@@ -29,5 +30,20 @@ public final class HighlightRegion {
 
   public Color colour() {
     return colour;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) return true;
+    if (obj == null || obj.getClass() != this.getClass()) return false;
+    var that = (HighlightRegion) obj;
+    return this.start == that.start
+        && this.end == that.end
+        && Objects.equals(this.colour, that.colour);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(start, end, colour);
   }
 }

@@ -3,6 +3,7 @@ package highlighting.regex;
 import highlighting.core.HighlightRegion;
 import java.awt.Color;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -81,5 +82,20 @@ public final class Token {
 
   public Color colour() {
     return colour;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) return true;
+    if (obj == null || obj.getClass() != this.getClass()) return false;
+    var that = (Token) obj;
+    return Objects.equals(this.pattern, that.pattern)
+        && this.matchingGroup == that.matchingGroup
+        && Objects.equals(this.colour, that.colour);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(pattern, matchingGroup, colour);
   }
 }
