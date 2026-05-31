@@ -13,6 +13,7 @@ public class RegexHighlighterTest {
   private final RegexHighlighter highlighter = new RegexHighlighter();
 
   @Test
+  // Prüft das einfache Keywords und String-Literale korrekt erkannt werden
   void collectMatchesFindsSimpleTokens() {
     var regions = highlighter.computeRegions("public class Test { String s = \"hi\"; }");
 
@@ -20,6 +21,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
+  // Keywords innerhalb eines Kommentares dürfen nicht separat hervorgehoben werden
   void keywordInsideLineCommentIsDiscardedBecauseCommentWins() {
     var text = "// public class";
 
@@ -30,6 +32,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
+  // Javadoc Kommentare sollen Vorrang vor normalen Block-Kommentaren haben
   void javadocCommentWinsOverBlockComment() {
     var text = "/** public class */";
 
@@ -40,6 +43,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
+  // Halb offene Intervalle wie [0,5) und [5, 10) dürfen sich nicht überschneiden
   void adjacentRegionsDoNotOverlap() {
     var first = new HighlightRegion(0, 5, MiniJavaColours.KEYWORD_COLOUR);
     var second = new HighlightRegion(5, 10, MiniJavaColours.STRING_LITERAL_COLOUR);
@@ -49,6 +53,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
+  // Ein leerer Text darf keine Hervorhebung erzeugen
   void emptyTextProducesNoRegions() {
     var regions = highlighter.computeRegions("");
 
@@ -56,6 +61,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
+  // Texte ohne passende Token dürfen keine Treffer liefern
   void textWithoutMatchesProducesNoRegions() {
     var regions = highlighter.computeRegions("abc def ghi");
 

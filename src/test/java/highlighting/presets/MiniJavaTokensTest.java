@@ -18,6 +18,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Prüft ob String Literale inklusive der Anführungszeichen erkannt werden
   void stringLiteralMatchesTextBetweenDoubleQuotes() {
     var text = "String s = \"hello\";";
 
@@ -31,6 +32,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Strings dürfen Kommentar ähnliche Inhalte enthalten, ohne als Kommentar erkannt zu werden
   void stringLiteralCanContainCommentLikeText() {
     var text = "\"// not a comment\"";
 
@@ -40,6 +42,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Prüft ob Character Literale korrekt erkannt werden
   void CharLiteralMatchesSingleCharacter() {
     var text = "char c = 'a';";
 
@@ -49,6 +52,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Keywords dürfen nur als vollständige Wörter erkannt werden
   void keywordMatchesOnlyWholeWords() {
     var text = "class myclass = new Example;";
 
@@ -58,6 +62,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Annotationen sollen sowohl am Zeilenanfang als auch nach Leerzeichen erkannt werden
   void annotationsMatchesAtLineStartAndAfterWhitespace() {
     var text = "@Override\n  @Over-ride";
 
@@ -67,7 +72,8 @@ public class MiniJavaTokensTest {
   }
 
   @Test
-  void lineCommentMatchesAcrossMultipleLines() {
+  // Einzeilige Kommentare sollen bis zum Zeilenende erkannt werden
+  void lineCommentMatchesUntilLineEnd() {
     var text = "int x; // comment class";
 
     var regions = regionsFor(MiniJavaColours.LINE_COMMENT_COLOUR, text);
@@ -76,6 +82,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Mehrzeilige Kommentare sollen auch Zeilenumbrüche korrekt enthalten
   void blockCommentMatchesAcrossMultipleLines() {
     var text = "a /* block\ncomment */ b";
 
@@ -85,6 +92,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Javadoc Kommentare sollen separat von normalen Block-Kommentaren erkannt werden
   void javadocCommentMatchesAcrossMultipleLines() {
     var text = "/** docs\nmore docs */";
 
@@ -94,6 +102,7 @@ public class MiniJavaTokensTest {
   }
 
   @Test
+  // Keywords innerhalb längerer Bezeichner dürfen nicht erkannt werden
   void noKeywordMatchInsideLongerIdentifier() {
     var text = "classification importer";
 
