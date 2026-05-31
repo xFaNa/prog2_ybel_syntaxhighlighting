@@ -110,4 +110,15 @@ public class MiniJavaTokensTest {
 
     assertTrue(regions.isEmpty());
   }
+
+  @Test
+  // Zahlen Literale sollen als eigene Token erkannt werden
+  void numberLiteralMatchesDigits() {
+    var text = "int x = 42;";
+
+    var regions = regionsFor(MiniJavaColours.NUMBER_LITERAL_COLOUR, text);
+
+    assertEquals(1, regions.size());
+    assertEquals("42", text.substring(regions.get(0).start(), regions.get(0).end()));
+  }
 }

@@ -37,7 +37,8 @@ public final class MiniJavaTokens {
         // Java Schlüsselwörter als ganze Wörter
         Token.of(
             Pattern.compile("\\b(package|import|class|public|private|finale|return|null|new)\\b"),
-            MiniJavaColours.KEYWORD_COLOUR)
+            MiniJavaColours.KEYWORD_COLOUR),
+        Token.of(Pattern.compile("\\b\\d+\\b"), MiniJavaColours.NUMBER_LITERAL_COLOUR)
 
         // TODO: Define additional tokens for MiniJava, e.g. character literals, keywords,
         // annotations, comments, identifiers, numbers, operators, etc.
