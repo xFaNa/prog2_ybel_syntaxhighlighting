@@ -1,0 +1,96 @@
+# Blatt 05 – ANTLR, Visitoren und Mockito
+
+## Aufgabe 1.1 – Syntaxhighlighting mit dem AntlrTokenCollector
+
+Für das Syntaxhighlighting wurde der von ANTLR generierte `MiniJavaLexer` verwendet. Der Eingabetext wird zunächst in einen `CharStream` umgewandelt und anschließend vom Lexer in Tokens zerlegt.
+
+Für relevante Token-Typen werden `HighlightRegion`-Objekte erzeugt. Dabei werden unter anderem folgende Elemente hervorgehoben:
+
+* Schlüsselwörter
+* String-Literale
+* Character-Literale
+* Kommentare
+* Annotationen
+
+Die Positionen der Highlight-Regionen werden über die Start- und Endposition der Tokens bestimmt.
+
+### Konfliktbehandlung
+
+Da die Tokens bereits eindeutig vom Lexer erzeugt werden, entstehen praktisch keine überlappenden Regionen. Eine zusätzliche Konfliktauflösung ist daher nicht erforderlich.
+
+### Vergleich mit Blatt 04
+
+Der RegexHighlighter basiert auf regulären Ausdrücken und benötigt Prioritäten zwischen verschiedenen Token-Arten.
+
+Der AntlrTokenCollector verwendet die vom Lexer erzeugten Tokens und erkennt dadurch Kommentare, Schlüsselwörter und Literale zuverlässiger. Die Implementierung ist zunächst aufwändiger, liefert jedoch robustere Ergebnisse.
+
+---
+
+## Aufgabe 1.2 – Pretty Printing mit ANTLR
+
+Für das Pretty Printing wurde zunächst ein Parse Tree mit Hilfe von `MiniJavaLexer` und `MiniJavaParser` erzeugt.
+
+Anschließend wurde ein eigener Visitor (`PrettyPrinterVisitor`) implementiert, der den Parse Tree traversiert und den Quellcode neu formatiert ausgibt.
+
+Folgende Regeln wurden umgesetzt:
+
+* Blöcke werden eingerückt dargestellt.
+* Nach öffnenden geschweiften Klammern erfolgt ein Zeilenumbruch.
+* Schließende Klammern stehen auf einer eigenen Zeile.
+* Statements mit Semikolon werden jeweils in einer eigenen Zeile ausgegeben.
+* Die Einrückungsbreite kann beim Start des Programms frei gewählt werden.
+
+### Beobachtungen
+
+Kommentare und die ursprüngliche Formatierung gehen bei der Ausgabe verloren. Der Pretty Printer erzeugt den Quellcode aus dem Parse Tree neu und berücksichtigt dabei hauptsächlich die syntaktische Struktur des Programms.
+
+---
+
+## Aufgabe 2.1 – Äquivalenzklassen und Grenzwertanalyse
+
+Für die Methode `Shop.accept()` wurden folgende Fälle betrachtet:
+
+### Äquivalenzklassen
+
+**Ungültige Aufträge**
+
+* E-Bike
+* Gravel-Bike
+
+**Gültige Aufträge**
+
+* RACE
+* FIXIE
+* SINGLE_SPEED
+
+**Kundenbezogene Bedingungen**
+
+* Kunde besitzt keinen offenen Auftrag
+* Kunde besitzt bereits einen offenen Auftrag
+
+### Grenzwerte
+
+* 4 offene Aufträge → weiterer Auftrag wird angenommen
+* 5 offene Aufträge → weiterer Auftrag wird abgelehnt
+
+---
+
+## Aufgabe 2.2 – Mocking mit Mockito
+
+Da die Methoden der Klasse `Order` lediglich eine `UnsupportedOperationException` werfen, wurden Mock-Objekte mit Mockito verwendet.
+
+Dadurch können Rückgabewerte für Methoden wie
+
+* `getBicycleType()`
+* `getCustomer()`
+
+vorgegeben werden, ohne dass eine vollständige Implementierung der Klasse notwendig ist.
+
+### Implementierte Tests
+
+* E-Bike wird abgelehnt
+* Gravel-Bike wird abgelehnt
+* Gültiger Auftrag wird angenommen
+* Zweiter Auftrag desselben Kunden wird abgelehnt
+* Fünfter Auftrag wird angenommen
+* Sechster Auftrag wird abgelehnt
